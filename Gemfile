@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem 'annotate'
 gem 'fullcontact'
 gem 'figaro'
+gem 'hashie'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

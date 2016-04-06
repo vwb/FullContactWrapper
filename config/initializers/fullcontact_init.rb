@@ -25,7 +25,7 @@ FullContact::Client::Person.module_eval do
             final_response = (format.to_s.downcase == 'xml') ? response['person'] : response
             CachedPerson.create_new_person(options[:email], final_response)
           else
-            cached_person.data
+            cached_person.parse_data
           end
           
         else

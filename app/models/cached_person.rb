@@ -7,9 +7,10 @@
 #  data       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
 
 class CachedPerson < ActiveRecord::Base
+
+
   validates :email, :data, presence: true
   validates :email, uniqueness: true
 
@@ -20,7 +21,8 @@ class CachedPerson < ActiveRecord::Base
 
   def self.create_new_person(email, data)
     formatted_email = CachedPerson.sanitize_email(email)
-    person = CachedPerson.new(email: formatted_email, data: data)
+    formatted_data = data.to_json
+    person = CachedPerson.new(email: formatted_email, data: formatted_data)
     
     if person.save
       data
@@ -37,6 +39,11 @@ class CachedPerson < ActiveRecord::Base
     else
       raise ArgumentError, "Not a properly formatted email"
     end
+  end
+
+  def parse_data
+    hashified_data = JSON.parse(self.data)
+    formatted_data = Hashie::Mash.new(hashified_data)
   end
   
 end
