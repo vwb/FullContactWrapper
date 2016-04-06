@@ -17,15 +17,20 @@ FullContact::Client::Person.module_eval do
           raise ArgumentError, "Querying by Facebook ID or username is no longer supported. Please contact support@fullcontact.com for more information."
         end
 
-        cached_person = CachedPerson.look_up_email(options[:email])
-        
-        if cached_person.nil?
+        if options.has_key?(:email)
+          cached_person = CachedPerson.look_up_email(options[:email])
+
+          if cached_person.nil? 
+            response = get('person', options, false, faraday_options)
+            final_response = (format.to_s.downcase == 'xml') ? response['person'] : response
+            CachedPerson.create_new_person(options[:email], final_response)
+          else
+            cached_person.data
+          end
+          
+        else
           response = get('person', options, false, faraday_options)
           final_response = (format.to_s.downcase == 'xml') ? response['person'] : response
-          CachedPerson.create_new_person(options[:email], final_response)
-        else
-          cached_person.data
         end
-
       end
 end
