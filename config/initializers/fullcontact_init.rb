@@ -18,7 +18,7 @@ FullContact::Client::Person.module_eval do
         end
 
         cached_person = CachedPerson.look_up_email(options[:email])
-
+        
         if cached_person.nil?
           response = get('person', options, false, faraday_options)
           final_response = (format.to_s.downcase == 'xml') ? response['person'] : response

@@ -23,7 +23,7 @@ class CachedPerson < ActiveRecord::Base
     if person.save
       data
     else
-      raise ArgumentError "#{person.errors.full_messages}"
+      raise ArgumentError, "#{person.errors.full_messages}"
     end
   end
 
@@ -33,7 +33,7 @@ class CachedPerson < ActiveRecord::Base
       formatted_email.first.downcase!
       formatted_email = formatted_email.join("@")
     else
-      raise ArgumentError "Not a properly formatted email"
+      raise ArgumentError, "Not a properly formatted email"
     end
   end
   
