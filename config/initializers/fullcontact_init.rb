@@ -8,6 +8,7 @@ FullContact::Client::Person.module_eval do
       # Returns extended information for a given person (email, phone, twitter or facebook)
 
       def person(options={}, faraday_options={})
+        
         if options.is_a?(String)
           raise ArgumentError, "Supplying an email address directly is not supported. Please use {email: #{options}} instead."
         end

@@ -14,11 +14,8 @@ class CachedPerson < ActiveRecord::Base
   validates :email, uniqueness: true
 
   def self.look_up_email(email)
-    #sanitize passed in email
-      #ensure proper formatting
-      #regex!
+    formatted_email = CachedPerson.sanitize_email(email)
     person = CachedPerson.find_by_email(email)
-    person
   end
 
   def self.create_new_person(email, data)
@@ -26,8 +23,18 @@ class CachedPerson < ActiveRecord::Base
     if person.save
       data
     else
-      #handle error
+      raise ArgumentError "#{person.errors.full_messages}"
     end
   end
 
+  def self.sanitize_email(email)
+    if m = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.match(email)
+      formatted_email = email.split("@")
+      formatted_email.first.downcase!
+      formatted_email = formatted_email.join("@")
+    else
+      raise ArgumentError "Not a properly formatted email"
+    end
+  end
+  
 end
