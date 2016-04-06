@@ -19,7 +19,9 @@ class CachedPerson < ActiveRecord::Base
   end
 
   def self.create_new_person(email, data)
-    person = CachedPerson.new(email: email, data: data)
+    formatted_email = CachedPerson.sanitize_email(email)
+    person = CachedPerson.new(email: formatted_email, data: data)
+    
     if person.save
       data
     else
